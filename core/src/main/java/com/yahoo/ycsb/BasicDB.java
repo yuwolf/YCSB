@@ -20,8 +20,8 @@ package com.yahoo.ycsb;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-
-
+import java.io.*;
+import java.util.concurrent.atomic.AtomicInteger;  
 /**
  * Basic DB that just prints out the requested operations, instead of doing them against a database.
  */
@@ -36,11 +36,20 @@ public class BasicDB extends DB
     public static final String RANDOMIZE_DELAY="basicdb.randomizedelay";
     public static final String RANDOMIZE_DELAY_DEFAULT="true";
     
-	
+    public static final String FIELD_LENGTH_DISTRIBUTION_PROPERTY = "fieldlengthdistribution";
+    public static final String FIELD_LENGTH_DISTRIBUTION_PROPERTY_DEFAULT = "constant";
+    public static final String FIELD_LENGTH_PROPERTY = "fieldlength";
+    public static final String FIELD_LENGTH_PROPERTY_DEFAULT = "100";
+    public static AtomicInteger threadCount =  new AtomicInteger(0);  
     boolean verbose;
     boolean randomizedelay;
 	int todelay;
-
+    String filedlengthdistribution;
+    String filedlength;
+    String filename;
+    PrintWriter output;
+    Thread current = Thread.currentThread();
+    
 	public BasicDB()
 	{
 		todelay=0;
@@ -77,6 +86,18 @@ public class BasicDB extends DB
 	@SuppressWarnings("unchecked")
 	public void init()
 	{
+		StringBuilder sb = getStringBuilder();
+		sb.append("/home/ming/workspace/YCSB/");
+		sb.append(filename);
+		filename="trace"+ threadCount.getAndIncrement();  
+		
+		try{
+		    output = new PrintWriter(filename);
+		}
+		catch(IOException ex){
+		    System.out.println(ex.toString());
+		}
+
 		verbose=Boolean.parseBoolean(getProperties().getProperty(VERBOSE, VERBOSE_DEFAULT));
 		todelay=Integer.parseInt(getProperties().getProperty(SIMULATE_DELAY, SIMULATE_DELAY_DEFAULT));
 		randomizedelay=Boolean.parseBoolean(getProperties().getProperty(RANDOMIZE_DELAY, RANDOMIZE_DELAY_DEFAULT));
@@ -125,7 +146,7 @@ public class BasicDB extends DB
 		if (verbose)
 		{
       StringBuilder sb = getStringBuilder();
-			sb.append("READ ").append(table).append(" ").append(key).append(" [ ");
+		/*	sb.append("READ ").append(table).append(" ").append(key).append(" [ ");
 			if (fields!=null)
 			{
 				for (String f : fields)
@@ -138,8 +159,15 @@ public class BasicDB extends DB
         sb.append("<all fields>");
 			}
 
-      sb.append("]");
-      System.out.println(sb);
+      sb.append("]");*/
+      sb.append("-1,R,").append(key);
+      try{
+	  output.println(sb);
+      }
+      catch(Exception ex){
+	  System.out.println(ex.toString());
+      }
+      //      System.out.println(sb);
     }
 
 		return Status.OK;
@@ -187,27 +215,35 @@ public class BasicDB extends DB
 	 * record key, overwriting any existing values with the same field name.
 	 *
 	 * @param table The name of the table
-	 * @param key The record key of the record to write.
+	 * @param key The record key of the record to write
 	 * @param values A HashMap of field/value pairs to update in the record
 	 * @return Zero on success, a non-zero error code on error
 	 */
 	public Status update(String table, String key, HashMap<String,ByteIterator> values)
 	{
 		delay();
-
+       int length = 0;
 		if (verbose)
 		{
       StringBuilder sb = getStringBuilder();
-      sb.append("UPDATE ").append(table).append(" ").append(key).append(" [ ");
+     /* sb.append("UPDATE ").append(table).append(" ").append(key).append(" [ ");*/
 			if (values!=null)
 			{
 				for (Map.Entry<String, ByteIterator> entry : values.entrySet())
 				{
-          sb.append(entry.getKey()).append("=").append(entry.getValue()).append(" ");
+					length = length + entry.getValue().toString().length();
+         // sb.append(entry.getKey()).append("=").append(entry.getValue()).append(" ");
 				}
 			}
-      sb.append("]");
-      System.out.println(sb);
+      /*sb.append("]");*/
+      sb.append(length + ",W,").append(key);
+      //      System.out.println(sb);
+      try{
+	  output.println(sb);
+      }
+      catch(Exception ex){
+	  System.out.println(ex.toString());
+      }
 		}
 
 		return Status.OK;
@@ -225,21 +261,27 @@ public class BasicDB extends DB
 	public Status insert(String table, String key, HashMap<String,ByteIterator> values)
 	{
 		delay();
-
+		int length = 0;
 		if (verbose)
 		{
       StringBuilder sb = getStringBuilder();
-      sb.append("INSERT ").append(table).append(" ").append(key).append(" [ ");
+   //   sb.append("INSERT ").append(table).append(" ").append(key).append(" [ ");
 			if (values!=null)
 			{
 				for (Map.Entry<String, ByteIterator> entry : values.entrySet())
 				{
-          sb.append(entry.getKey()).append("=").append(entry.getValue()).append(" ");
+					length = length + entry.getValue().toString().length();
 				}
 			}
 
-      sb.append("]");
-      System.out.println(sb);
+	 sb.append(length + ",W,").append(key);
+	 //      System.out.println(sb);
+	 try{
+	     output.println(sb);
+	 }
+	 catch(Exception ex){
+	     System.out.println(ex.toString());
+	 }
 		}
 
 		return Status.OK;
@@ -265,6 +307,16 @@ public class BasicDB extends DB
 		}
 
 		return Status.OK;
+	}
+
+	public void cleanup() throws DBException
+        {
+	    try{
+		output.close();
+	    }
+	    catch(Exception ex){
+		System.out.println(ex.toString());
+	    }
 	}
 
 	/**
