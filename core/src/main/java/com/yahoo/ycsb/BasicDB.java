@@ -110,7 +110,8 @@ public class BasicDB extends DB
 			  sb.append(props.getProperty(FIELD_LENGTH_DISTRIBUTION_PROPERTY,FIELD_LENGTH_DISTRIBUTION_PROPERTY_DEFAULT));
 		sb.append("_");
 		sb.append(props.getProperty(INSERT_ORDER_PROPERTY,INSERT_ORDER_PROPERTY_DEFAULT));
-		
+		sb.append("_");
+		sb.append(props.getProperty(FIELD_LENGTH_PROPERTY,FIELD_LENGTH_PROPERTY_DEFAULT));
 			  sb.append(".trace"+ threadCount.getAndIncrement());  
 			  filename=sb.toString();
 		try{
