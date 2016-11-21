@@ -29,7 +29,8 @@ public class BasicDB extends DB
 {
 	public static final String VERBOSE="basicdb.verbose";
 	public static final String VERBOSE_DEFAULT="true";
-	
+    public static final String FILEDIR="filedirectory";
+    public static final String FILEDIR_DEFAULT="./";
     public static final String SIMULATE_DELAY="basicdb.simulatedelay";
     public static final String SIMULATE_DELAY_DEFAULT="0";
     
@@ -40,6 +41,15 @@ public class BasicDB extends DB
     public static final String FIELD_LENGTH_DISTRIBUTION_PROPERTY_DEFAULT = "constant";
     public static final String FIELD_LENGTH_PROPERTY = "fieldlength";
     public static final String FIELD_LENGTH_PROPERTY_DEFAULT = "100";
+    public static final String INSERT_ORDER_PROPERTY = "insertorder";
+    public static final String INSERT_ORDER_PROPERTY_DEFAULT = "hashed";
+    public static final String REQUEST_DISTRIBUTION_PROPERTY = "requestdistribution";
+    public static final String REQUEST_DISTRIBUTION_PROPERTY_DEFAULT = "uniform";
+    public static final String INPUTWORKLOAD_PROPERTY = "inputworkload";
+    public static final String INPUTWORKLOAD_PROPERTY_DEFAULT = "workloadb";
+    public static final String LOAD_RUN_PROPERTY = "load_run";
+    public static final String LOAD_RUN_PROPERTY_DEFAULT = "load";
+
     public static AtomicInteger threadCount =  new AtomicInteger(0);  
     boolean verbose;
     boolean randomizedelay;
@@ -87,10 +97,22 @@ public class BasicDB extends DB
 	public void init()
 	{
 		StringBuilder sb = getStringBuilder();
-		sb.append("/home/ming/workspace/YCSB/");
-		sb.append(filename);
-		filename="trace"+ threadCount.getAndIncrement();  
+		Properties props=getProperties();
+		sb.append(props.getProperty(FILEDIR,FILEDIR_DEFAULT));
+		sb.append(props.getProperty(INPUTWORKLOAD_PROPERTY,INPUTWORKLOAD_PROPERTY_DEFAULT));
+		sb.append("_");
+		sb.append(props.getProperty(REQUEST_DISTRIBUTION_PROPERTY,REQUEST_DISTRIBUTION_PROPERTY_DEFAULT));
+		sb.append("_");
+		sb.append(props.getProperty(LOAD_RUN_PROPERTY,LOAD_RUN_PROPERTY_DEFAULT));
+		sb.append("_");
+		sb.append(props.getProperty(Client.RECORD_COUNT_PROPERTY,Client.DEFAULT_RECORD_COUNT));
+		sb.append("_");
+			  sb.append(props.getProperty(FIELD_LENGTH_DISTRIBUTION_PROPERTY,FIELD_LENGTH_DISTRIBUTION_PROPERTY_DEFAULT));
+		sb.append("_");
+		sb.append(props.getProperty(INSERT_ORDER_PROPERTY,INSERT_ORDER_PROPERTY_DEFAULT));
 		
+			  sb.append(".trace"+ threadCount.getAndIncrement());  
+			  filename=sb.toString();
 		try{
 		    output = new PrintWriter(filename);
 		}

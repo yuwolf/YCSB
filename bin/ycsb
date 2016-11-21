@@ -81,13 +81,12 @@ DATABASES = {
     "orientdb"     : "com.yahoo.ycsb.db.OrientDBClient",
     "rados"        : "com.yahoo.ycsb.db.RadosClient",
     "redis"        : "com.yahoo.ycsb.db.RedisClient",
-    "rest"         : "com.yahoo.ycsb.webservice.rest.RestClient",
     "riak"         : "com.yahoo.ycsb.db.riak.RiakKVClient",
     "s3"           : "com.yahoo.ycsb.db.S3Client",
-    "solr"         : "com.yahoo.ycsb.db.solr.SolrClient",
-    "solr6"        : "com.yahoo.ycsb.db.solr6.SolrClient",
+    "solr"         : "com.yahoo.ycsb.db.SolrClient",
     "tarantool"    : "com.yahoo.ycsb.db.TarantoolClient",
-    "voldemort"    : "com.yahoo.ycsb.db.VoldemortClient"
+    "voldemort"    : "com.yahoo.ycsb.db.VoldemortClient",
+    "leveldbjni"   : "com.yahoo.ycsb.db.LevelDbJniClient"
 }
 
 OPTIONS = {
@@ -200,7 +199,8 @@ def get_classpath_from_maven(module):
                                    "-am", "package", "-DskipTests",
                                    "dependency:build-classpath",
                                    "-DincludeScope=compile",
-                                   "-Dmdep.outputFilterFile=true"])
+                                   "-Dmdep.outputFilterFile=true",
+                                   "-Dcheckstyle.skip=true"])
         # the above outputs a "classpath=/path/tojar:/path/to/other/jar" for each module
         # the last module will be the datastore binding
         line = [x for x in mvn_output.splitlines() if x.startswith("classpath=")][-1:]

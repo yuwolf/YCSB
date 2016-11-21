@@ -178,7 +178,7 @@ else
       fi
 
       echo "[WARN] YCSB libraries not found.  Attempting to build..."
-      mvn -pl com.yahoo.ycsb:"$MVN_PROJECT" -am package -DskipTests
+      mvn -pl com.yahoo.ycsb:"$MVN_PROJECT" -am package -DskipTests -Dcheckstyle.skip=true
       if [ "$?" -ne 0 ] ; then
         echo "[ERROR] Error trying to build project. Exiting."
         exit 1;
