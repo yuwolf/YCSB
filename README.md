@@ -79,6 +79,9 @@ To build a single database binding:
 
 Generate Trace
 ---------------------
+
+sudo apt-get install mvn
+
 note that the ```FILEDIR ```
 in genTrace.sh means that the location of the trace.
 run ./genTrace.sh
