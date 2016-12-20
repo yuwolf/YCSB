@@ -1,13 +1,17 @@
-RECORDCOUNT=100
+#RECORDCOUNT=102456280
+RECORDCOUNT=16268816
+#RECORDCOUNT=102456280
 FIELDLENGTH=1024
-WORKLOAD=workloada
-FILEDIR=./
-INSERTORDER=ordered
+WORKLOAD=workloadu
+#OPERATIONCOUNT=50000
+OPERATIONCOUNT="$RECORDCOUNT"
+FILEDIR=/home/cyx/workspace/YCSB/traceGen/
+INSERTORDER=hashed
 LOAD_RUN=load
-requestdistribution=zipfian
+requestdistribution=uniform
 fieldlengthdistribution=constant
 bin/ycsb load basic -P  workloads/"$WORKLOAD" -p recordcount="$RECORDCOUNT" -p fieldlength="$FIELDLENGTH" -p fieldcount=1 -p filedirectory="$FILEDIR"  -p insertorder="$INSERTORDER" -p load_run="$LOAD_RUN" -p requestdistribution="$requestdistribution" -p inputworkload="$WORKLOAD" -p fieldlengthdistribution="$fieldlengthdistribution" -p zeropadding=20
 LOAD_RUN=run
-bin/ycsb run basic -P  workloads/"$WORKLOAD" -p recordcount="$RECORDCOUNT" -p operationcount="$RECORDCOUNT" -p fieldlength="$FIELDLENGTH" -p fieldcount=1 -p filedirectory="$FILEDIR"  -p insertorder="$INSERTORDER" -p load_run="$LOAD_RUN" -p requestdistribution="$requestdistribution" -p inputworkload="$WORKLOAD" -p fieldlengthdistribution="$fieldlengthdistribution" -p zeropadding=20 
+bin/ycsb run basic -P  workloads/"$WORKLOAD" -p recordcount="$RECORDCOUNT" -p operationcount="$OPERATIONCOUNT" -p fieldlength="$FIELDLENGTH" -p fieldcount=1 -p filedirectory="$FILEDIR"  -p insertorder="$INSERTORDER" -p load_run="$LOAD_RUN" -p requestdistribution="$requestdistribution" -p inputworkload="$WORKLOAD" -p fieldlengthdistribution="$fieldlengthdistribution" -p zeropadding=20 
 
 
