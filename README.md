@@ -79,12 +79,14 @@ To build a single database binding:
 
 Generate Trace
 ---------------------
-
+```
 sudo apt-get install mvn
+```
 You may need to configure jdk to run mvn.
 from follow to get jdk1.8:
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+```
 tar -zxvf jdk-8u111-linux-x64.tar.gz 
 sudo mkdir /usr/local/java
 sudo mv jdk1.8.0_111/ /usr/local/java/
@@ -92,7 +94,7 @@ export JAVA_HOME=/usr/local/java/jdk1.8.0_111
 export JRE_HOME=/usr/local/java/jdk1.7.0_60/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
-
+```
 Then,configure genTrace.sh
 
 You may only need to alter FILEDIR in genTrace.sh
