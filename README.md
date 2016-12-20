@@ -103,3 +103,10 @@ note that the ```FILEDIR ``` in genTrace.sh means that the location of the trace
 Don't forget last "/" in FILEDIR
 
 run ./genTrace.sh
+
+After run genTrace.h.You need do this:
+```
+cat workloadu_uniform_run_5000_constant_hashed_1024.trace0 >> workloadu_uniform_load_5000_constant_hashed_1024.trace0 
+
+```
+To Concatenate two files to one file.
