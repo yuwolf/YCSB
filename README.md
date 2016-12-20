@@ -101,4 +101,5 @@ You may only need to alter FILEDIR in genTrace.sh
 
 note that the ```FILEDIR ``` in genTrace.sh means that the location of the trace.
 Don't forget last "/" in FILEDIR
+
 run ./genTrace.sh
