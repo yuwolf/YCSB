@@ -8,7 +8,7 @@ OPERATIONCOUNT="$RECORDCOUNT"
 FILEDIR=/home/ceph/traceGen/
 INSERTORDER=hashed
 LOAD_RUN=load
-requestdistribution=uniform
+requestdistribution=zipfian
 fieldlengthdistribution=constant
 bin/ycsb load basic -P  workloads/"$WORKLOAD" -p recordcount="$RECORDCOUNT" -p fieldlength="$FIELDLENGTH" -p fieldcount=1 -p filedirectory="$FILEDIR"  -p insertorder="$INSERTORDER" -p load_run="$LOAD_RUN" -p requestdistribution="$requestdistribution" -p inputworkload="$WORKLOAD" -p fieldlengthdistribution="$fieldlengthdistribution" -p zeropadding=20
 LOAD_RUN=run
