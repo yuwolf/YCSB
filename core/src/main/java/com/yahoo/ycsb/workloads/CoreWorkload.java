@@ -33,6 +33,7 @@ import com.yahoo.ycsb.generator.SequentialGenerator;
 import com.yahoo.ycsb.generator.SkewedLatestGenerator;
 import com.yahoo.ycsb.generator.UniformIntegerGenerator;
 import com.yahoo.ycsb.generator.ZipfianGenerator;
+import com.yahoo.ycsb.generator.SmallAndLargeGenerator;
 import com.yahoo.ycsb.measurements.Measurements;
 
 import java.io.IOException;
@@ -367,6 +368,12 @@ public class CoreWorkload extends Workload {
       fieldlengthgenerator = new UniformIntegerGenerator(1, fieldlength);
     } else if (fieldlengthdistribution.compareTo("zipfian") == 0) {
       fieldlengthgenerator = new ZipfianGenerator(1, fieldlength);
+    } else if (fieldlengthdistribution.compareTo(".1to1") == 0){
+      fieldlengthgenerator = new SmallAndLargeGenerator(40, fieldlength,1);
+    } else if (fieldlengthdistribution.compareTo(".1to2") == 0){
+      fieldlengthgenerator = new SmallAndLargeGenerator(40, fieldlength,0);
+    } else if (fieldlengthdistribution.compareTo(".2to1") == 0){
+      fieldlengthgenerator = new SmallAndLargeGenerator(40, fieldlength,2);
     } else if (fieldlengthdistribution.compareTo("histogram") == 0) {
       try {
         fieldlengthgenerator = new HistogramGenerator(fieldlengthhistogram);
@@ -495,6 +502,8 @@ public class CoreWorkload extends Workload {
       scanlength = new UniformIntegerGenerator(1, maxscanlength);
     } else if (scanlengthdistrib.compareTo("zipfian") == 0) {
       scanlength = new ZipfianGenerator(1, maxscanlength);
+    } else if (scanlengthdistrib.compareTo("max") == 0){
+      scanlength = new UniformIntegerGenerator(maxscanlength,maxscanlength);
     } else {
       throw new WorkloadException(
           "Distribution \"" + scanlengthdistrib + "\" not allowed for scan length");
